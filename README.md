@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Student-Teacher Booking System
 
-## Getting Started
+A full-stack application built with Next.js, MongoDB, and TypeScript for managing appointment bookings between students and teachers.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Admin Module
+- Dashboard with system stats.
+- Manage Teachers (Add/Update/Delete).
+- Approve/Reject Student registrations.
+- View all system appointments and logs.
+
+### Teacher Module
+- Manage Profile (Department, Subject, Bio).
+- Schedule Availability Slots.
+- Manage Appointment Requests (Approve/Reject).
+- View upcoming schedule.
+
+### Student Module
+- Register and Login.
+- Search Teachers by Name, Department, or Subject.
+- View Teacher Availability.
+- Book Appointments.
+- Track Appointment Status.
+
+## 🛠 Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Database**: MongoDB (Mongoose)
+- **Styling**: Tailwind CSS, Shadcn/UI (Custom implementation)
+- **Auth**: JWT (Access + Refresh Tokens), Bcrypt, Middleware RBAC
+- **Validation**: Zod
+
+## 📂 Folder Structure
+
+```
+/app
+  /(auth)       # Login/Register pages
+  /admin        # Admin specific pages & layout
+  /teacher      # Teacher specific pages & layout
+  /student      # Student specific pages & layout
+  /api          # Backend API routes
+/components
+  /ui           # Reusable UI components
+/lib
+  /models       # Mongoose Schemas (User, Appointment, etc)
+  db.ts         # Database connection
+  auth.ts       # Auth helpers
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚙️ Setup Instructions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository**:
+   ```bash
+   git clone <repo-url>
+   cd student_teacher_booking_appointment
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. **Environment Variables**:
+   Create a `.env.local` file in the root:
+   ```env
+   MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/edubook
+   JWT_SECRET=your_jwt_secret_key
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
+   Access the app at `http://localhost:3000`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🧪 API Documentation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Auth
+- `POST /api/auth/register`: Register new student.
+- `POST /api/auth/login`: Login user.
 
-## Deploy on Vercel
+### Admin
+- `GET /api/admin/teachers`: List teachers.
+- `POST /api/admin/teachers`: Add teacher.
+- `PATCH /api/admin/students`: Approve student.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Teacher
+- `POST /api/teachers/availability`: Add slot.
+- `PATCH /api/teachers/appointments`: Update appointment status.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Student
+- `GET /api/teachers/search`: Search teachers.
+- `POST /api/appointments/book`: Book slot.
+
+## 🔒 Security
+- **RBAC**: Middleware protects `/admin`, `/teacher`, and `/student` routes.
+- **Validation**: Zod schemas validate all API inputs.
+- **Passwords**: Hashed using Bcrypt.
+
+## 📝 License
+MIT
