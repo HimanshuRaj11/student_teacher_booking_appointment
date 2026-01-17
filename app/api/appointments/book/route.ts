@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
-        const studentId = payload.userId;
+        const studentId = payload.userId as string;
 
         const body = await req.json();
         const { teacherId, slotId, date, message } = body; // date might be redundant if we use slotId
@@ -26,9 +26,9 @@ export async function POST(req: NextRequest) {
         // Create Appointment
         const appointment = await Appointment.create({
             student: studentId,
-            teacher: teacherId,
+            teacher: teacherId as string,
             date: slot.date, // Use slot date ensures consistency
-            message,
+            message: message as string,
             status: 'pending' // Teacher must approve
         });
 
