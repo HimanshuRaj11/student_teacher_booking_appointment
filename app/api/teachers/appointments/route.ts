@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
-        const userId = payload.userId;
+        const userId = payload.userId as string;
 
         const appointments = await Appointment.find({ teacher: userId })
             .populate("student", "name email")
@@ -31,7 +31,7 @@ export async function PATCH(req: NextRequest) {
 
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
-        const userId = payload.userId;
+        const userId = payload.userId as string;
 
         const body = await req.json();
         const { appointmentId, status, teacherNote } = body;
