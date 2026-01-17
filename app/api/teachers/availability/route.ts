@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
-        const userId = payload.userId;
+        const userId = payload.userId as string;
 
         const slots = await AvailabilitySlot.find({ teacher: userId }).sort({ date: 1 });
         return NextResponse.json(slots);
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
-        const userId = payload.userId;
+        const userId = payload.userId as string;
 
         const body = await req.json();
         const { date, startTime, endTime } = body;
@@ -57,12 +57,8 @@ export async function DELETE(req: NextRequest) {
 
         if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
 
-        // Ensure specific teacher owns it? Yes via findOneAndDelete query if strictly enforcing, 
-        // but simple DELETE by ID is okay if we trust ID. 
-        // Better: findOneAndDelete({ _id: id, teacher: userId })
-
         const { payload } = await jwtVerify(token, JWT_SECRET);
-        const userId = payload.userId;
+        const userId = payload.userId as string;
 
         await AvailabilitySlot.findOneAndDelete({ _id: id, teacher: userId });
 
