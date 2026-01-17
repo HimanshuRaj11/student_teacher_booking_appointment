@@ -12,16 +12,10 @@ export async function GET(req: NextRequest) {
 
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
-        const userId = payload.userId;
+        const userId = payload.userId as string;
 
         const appointments = await Appointment.find({ student: userId })
-            .populate("teacher", "name email") // Populate teacher details since ref is User
-            // But teacher info like 'Dept' is in TeacherProfile.
-            // For list, just name is fine.
-            // If we want detailed Profile info (dept), we'd need aggregation or 
-            // better schemas (TeacherProfile refs User, Appointment refs User... 
-            // linking User to TeacherProfile is 1:1).
-            // For now, Name/Email from User is sufficient for list.
+            .populate("teacher", "name email")
             .sort({ date: 1 });
 
         return NextResponse.json(appointments);
