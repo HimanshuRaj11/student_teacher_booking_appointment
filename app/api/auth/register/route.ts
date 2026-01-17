@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
         }
 
         return NextResponse.json({ message: "User registered successfully" }, { status: 201 });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (error instanceof z.ZodError) {
             return NextResponse.json({ error: error.message }, { status: 400 });
         }

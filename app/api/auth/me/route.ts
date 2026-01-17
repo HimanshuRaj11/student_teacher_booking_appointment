@@ -16,9 +16,13 @@ export async function GET(req: NextRequest) {
         }
 
         // Verify token
-        let decoded: any;
+        interface JWTPayload {
+            userId: string;
+            role: string;
+        }
+        let decoded: JWTPayload;
         try {
-            decoded = jwt.verify(token, JWT_SECRET);
+            decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
         } catch (err) {
             // Token invalid or expired - clear it from cookies
             const response = NextResponse.json({ user: null }, { status: 200 });
@@ -44,8 +48,9 @@ export async function GET(req: NextRequest) {
         }
 
         return NextResponse.json({ user });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Error in /api/auth/me:", error);
-        return NextResponse.json({ user: null, error: error.message }, { status: 500 });
+        const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
+        return NextResponse.json({ user: null, error: errorMessage }, { status: 500 });
     }
 }

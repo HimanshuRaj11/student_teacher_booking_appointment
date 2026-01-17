@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
 import TeacherProfile from "@/lib/models/TeacherProfile";
 
+interface PopulatedTeacher {
+    user: {
+        _id: string;
+        name: string;
+        email: string;
+    };
+    department: string;
+    subject: string;
+    bio?: string;
+}
+
 export async function GET(req: NextRequest) {
     await dbConnect();
     try {
@@ -20,8 +31,8 @@ export async function GET(req: NextRequest) {
             return NextResponse.json(all);
         }
 
-        const all = await TeacherProfile.find().populate("user", "name email");
-        const filtered = all.filter((t: any) =>
+        const all = await TeacherProfile.find().populate("user", "name email") as unknown as PopulatedTeacher[];
+        const filtered = all.filter((t: PopulatedTeacher) =>
             t.user.name.toLowerCase().includes(query.toLowerCase()) ||
             t.department.toLowerCase().includes(query.toLowerCase()) ||
             t.subject.toLowerCase().includes(query.toLowerCase())

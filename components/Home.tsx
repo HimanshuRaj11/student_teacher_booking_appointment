@@ -97,7 +97,7 @@ export default function HomePage() {
                                 }`}
                         >
                             <Users className="w-16 h-16 text-blue-600 mx-auto mb-4" />
-                            <h3 className="text-2xl font-bold text-gray-900 mb-2">I'm a Student</h3>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">I{"'"}m a Student</h3>
                             <p className="text-gray-600 mb-4">Book appointments with teachers for guidance and support</p>
                             <button className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center space-x-2">
                                 <span>Get Started</span>
@@ -111,7 +111,7 @@ export default function HomePage() {
                                 }`}
                         >
                             <BookOpen className="w-16 h-16 text-purple-600 mx-auto mb-4" />
-                            <h3 className="text-2xl font-bold text-gray-900 mb-2">I'm a Teacher</h3>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">I{"'"}m a Teacher</h3>
                             <p className="text-gray-600 mb-4">Manage your schedule and connect with students effortlessly</p>
                             <button className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center justify-center space-x-2">
                                 <span>Get Started</span>
@@ -199,7 +199,7 @@ export default function HomePage() {
                                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                                 ))}
                             </div>
-                            <p className="text-gray-700 mb-4 italic">"{testimonial.text}"</p>
+                            <p className="text-gray-700 mb-4 italic">{'"' + testimonial.text + '"'}</p>
                             <div>
                                 <div className="font-bold text-gray-900">{testimonial.name}</div>
                                 <div className="text-gray-600 text-sm">{testimonial.role}</div>

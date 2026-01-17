@@ -295,7 +295,7 @@ export default function BookAppointmentPage({ params }: { params: Promise<{ teac
                         <Textarea
                             id="message"
                             value={message}
-                            onChange={(e: any) => {
+                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                                 setMessage(e.target.value);
                                 setError(null);
                             }}

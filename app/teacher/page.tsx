@@ -75,9 +75,10 @@ export default function TeacherDashboard() {
             };
 
             setStats(calculatedStats);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Failed to fetch dashboard data:", err);
-            setError(err.response?.data?.error || "Failed to load dashboard data");
+            const errorMessage = (err as { response?: { data?: { error?: string } } })?.response?.data?.error || "Failed to load dashboard data";
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -289,8 +290,8 @@ export default function TeacherDashboard() {
                                             </div>
                                             <span
                                                 className={`px-3 py-1 rounded-full text-xs font-medium ${appointment.status === "approved"
-                                                        ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
-                                                        : "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
+                                                    ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                                                    : "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
                                                     }`}
                                             >
                                                 {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}

@@ -42,8 +42,9 @@ export default function AddTeacherPage() {
 
             router.push("/admin/teachers");
             router.refresh();
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const errorMessage = err instanceof Error ? err.message : "Failed to add teacher";
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }

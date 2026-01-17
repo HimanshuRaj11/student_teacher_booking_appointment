@@ -36,8 +36,10 @@ export default function LoginPage() {
             else if (data.user.role === "teacher") router.push("/teacher");
             else router.push("/student");
 
-        } catch (err: any) {
-            setError(err.response?.data?.error || err.message || "Login failed");
+        } catch (err: unknown) {
+            const errorMessage = (err as { response?: { data?: { error?: string } }, message?: string })?.response?.data?.error ||
+                (err as { message?: string })?.message || "Login failed";
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }

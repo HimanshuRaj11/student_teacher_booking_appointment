@@ -34,8 +34,10 @@ export default function TeacherRegisterPage() {
         try {
             await axios.post("/api/auth/register", { ...formData, role: "teacher" });
             router.push("/login");
-        } catch (err: any) {
-            setError(err.response?.data?.error || err.message || "Registration failed");
+        } catch (err: unknown) {
+            const errorMessage = (err as { response?: { data?: { error?: string } }, message?: string })?.response?.data?.error ||
+                (err as { message?: string })?.message || "Registration failed";
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }

@@ -33,7 +33,7 @@ export async function PUT(req: NextRequest) {
         );
 
         return NextResponse.json({ message: "Notification preferences updated" });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Notification update error:", error);
         return NextResponse.json({ error: "Failed to update notifications" }, { status: 500 });
     }

@@ -38,7 +38,7 @@ export async function PUT(req: NextRequest) {
         await user.save();
 
         return NextResponse.json({ message: "Password changed successfully" });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Password change error:", error);
         return NextResponse.json({ error: "Failed to change password" }, { status: 500 });
     }

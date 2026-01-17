@@ -54,10 +54,11 @@ export async function POST(req: NextRequest) {
         });
 
         return NextResponse.json({ message: "Teacher created successfully" }, { status: 201 });
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (error instanceof z.ZodError) {
             return NextResponse.json({ error: error.message }, { status: 400 });
         }
-        return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
+        const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
+        return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
 }

@@ -62,8 +62,9 @@ export default function TeacherSettingsPage() {
         try {
             await axios.put("/api/teachers/settings/profile", profileData);
             setMessage({ type: "success", text: "Profile updated successfully!" });
-        } catch (error: any) {
-            setMessage({ type: "error", text: error.response?.data?.error || "Failed to update profile" });
+        } catch (error: unknown) {
+            const errorMessage = (error as { response?: { data?: { error?: string } } })?.response?.data?.error || "Failed to update profile";
+            setMessage({ type: "error", text: errorMessage });
         } finally {
             setLoading(false);
         }
@@ -87,8 +88,9 @@ export default function TeacherSettingsPage() {
             });
             setMessage({ type: "success", text: "Password changed successfully!" });
             setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
-        } catch (error: any) {
-            setMessage({ type: "error", text: error.response?.data?.error || "Failed to change password" });
+        } catch (error: unknown) {
+            const errorMessage = (error as { response?: { data?: { error?: string } } })?.response?.data?.error || "Failed to change password";
+            setMessage({ type: "error", text: errorMessage });
         } finally {
             setLoading(false);
         }
@@ -101,8 +103,9 @@ export default function TeacherSettingsPage() {
         try {
             await axios.put("/api/teachers/settings/notifications", notifications);
             setMessage({ type: "success", text: "Notification preferences updated!" });
-        } catch (error: any) {
-            setMessage({ type: "error", text: error.response?.data?.error || "Failed to update notifications" });
+        } catch (error: unknown) {
+            const errorMessage = (error as { response?: { data?: { error?: string } } })?.response?.data?.error || "Failed to update notifications";
+            setMessage({ type: "error", text: errorMessage });
         } finally {
             setLoading(false);
         }
