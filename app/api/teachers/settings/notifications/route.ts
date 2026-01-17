@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
 import TeacherProfile from "@/lib/models/TeacherProfile";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 
 export async function PUT(req: NextRequest) {
     await dbConnect();
@@ -12,9 +13,7 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        // Get user ID from token
-        const jwt = require("jsonwebtoken");
-        const decoded = jwt.verify(token, process.env.JWT_SECRET) as { userId: string };
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
         const userId = decoded.userId;
 
         const body = await req.json();

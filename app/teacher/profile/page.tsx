@@ -6,8 +6,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
+interface TeacherProfile {
+    user: {
+        name: string;
+        email: string;
+    };
+    department: string;
+    subject: string;
+    bio?: string;
+}
+
 export default function TeacherProfilePage() {
-    const [profile, setProfile] = useState<any>(null);
+    const [profile, setProfile] = useState<TeacherProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
         department: "",

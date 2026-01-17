@@ -166,7 +166,7 @@ export default function StudentAppointmentsPage() {
                                     <div className="flex items-start gap-2 mt-3 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-100 dark:border-blue-900/30">
                                         <StickyNote className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5" />
                                         <div className="flex-1">
-                                            <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">Teacher's Note</p>
+                                            <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">Teacher{"'"}s Note</p>
                                             <p className="text-sm text-blue-900 dark:text-blue-300 mt-0.5">{apt.teacherNote}</p>
                                         </div>
                                     </div>

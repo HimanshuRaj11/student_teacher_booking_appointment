@@ -307,7 +307,7 @@ export default function TeacherDashboard() {
                                     No upcoming appointments
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-400">
-                                    You're all caught up! New appointment requests will appear here.
+                                    You{"'"}re all caught up! New appointment requests will appear here.
                                 </p>
                             </div>
                         )}

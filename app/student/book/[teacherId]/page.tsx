@@ -240,7 +240,7 @@ export default function BookAppointmentPage({ params }: { params: Promise<{ teac
                 <CardContent className="space-y-6">
                     {data.teacher.bio && (
                         <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <p className="text-sm text-gray-700 italic">"{data.teacher.bio}"</p>
+                            <p className="text-sm text-gray-700 italic">{data.teacher.bio}</p>
                         </div>
                     )}
 

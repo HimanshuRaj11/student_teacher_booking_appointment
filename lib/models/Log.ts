@@ -3,7 +3,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 export interface ILog extends Document {
     user?: mongoose.Types.ObjectId; // User who performed the action (optional for system actions)
     action: string;
-    details?: Record<string, any>;
+    details?: Record<string, unknown>;
     ipAddress?: string;
     createdAt: Date;
 }
