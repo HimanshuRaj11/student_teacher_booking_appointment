@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 
 export default function StudentLayout({
     children,
@@ -11,17 +12,13 @@ export default function StudentLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const { logout } = useAuth();
 
     const navItems = [
         { name: "Dashboard", href: "/student" },
         { name: "Find Teacher", href: "/student/search" },
         { name: "My Appointments", href: "/student/appointments" },
     ];
-
-    const handleLogout = () => {
-        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-        window.location.href = "/login";
-    };
 
     return (
         <div className="flex min-h-screen">
@@ -45,7 +42,7 @@ export default function StudentLayout({
                     <Button
                         variant="destructive"
                         className="w-full mt-8"
-                        onClick={handleLogout}
+                        onClick={logout}
                     >
                         Logout
                     </Button>

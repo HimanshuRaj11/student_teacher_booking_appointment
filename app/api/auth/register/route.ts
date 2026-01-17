@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
 import User, { IUser } from "@/lib/models/User";
 import StudentProfile from "@/lib/models/StudentProfile";
+import TeacherProfile from "@/lib/models/TeacherProfile";
 import { hashPassword } from "@/lib/auth";
 import { z } from "zod";
 
@@ -14,7 +15,7 @@ const registerSchema = z.object({
     studentId: z.string().optional(),
     course: z.string().optional(),
     year: z.string().optional(),
-    // Additional fields for Teacher (if needed in signup, usually admin adds them)
+    // Additional fields for Teacher
     department: z.string().optional(),
     subject: z.string().optional(),
 });
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const body = await req.json();
-        const { name, email, password, role, studentId, course, year } = registerSchema.parse(body);
+        const { name, email, password, role, studentId, course, year, department, subject } = registerSchema.parse(body);
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -56,28 +57,21 @@ export async function POST(req: NextRequest) {
                 year,
             });
         } else if (role === 'teacher') {
-            // Ideally teachers are added by admin, but if we allow signup:
-            // We would need department/subject. 
-            // For this task, let's assume Teachers are ONLY added by Admin as per "Admin Module -> Add teacher".
-            // But if they use this endpoint, we might block them or flag them.
-            // Let's restrict this endpoint to Students mostly, or allow generic user creation without profile if needed (bad practice).
-
-            // Actually, prompt says: "Admin Module: Add teacher". 
-            // "Student Module: Student registration".
-            // So ONLY Students register here. Teachers are added by Admin.
-
-            // Wait, if a teacher tries to register, what happens? 
-            // Let's force role to be 'student' if using public register, OR check if the user meant to be a teacher.
-            // For now, I will allow 'student' registration effectively. 
-            if (role === 'teacher') {
-                return NextResponse.json({ error: "Teachers must be added by Admin" }, { status: 403 });
+            if (!department || !subject) {
+                await User.findByIdAndDelete(user._id);
+                return NextResponse.json({ error: "Missing teacher details" }, { status: 400 });
             }
+            await TeacherProfile.create({
+                user: user._id,
+                department,
+                subject,
+            });
         }
 
         return NextResponse.json({ message: "User registered successfully" }, { status: 201 });
     } catch (error: any) {
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: error.errors }, { status: 400 });
+            return NextResponse.json({ error: error.message }, { status: 400 });
         }
         console.error("Registration Error:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

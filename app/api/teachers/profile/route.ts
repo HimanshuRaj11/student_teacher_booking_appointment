@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 import dbConnect from "@/lib/db";
 import TeacherProfile from "@/lib/models/TeacherProfile";
-import { verifyAccessToken } from "@/lib/auth"; // Assume we decode token to get ID
+
 import { jwtVerify } from "jose"; // Middleware used jose, let's consistency check.
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_change_me_in_prod");
@@ -14,7 +15,7 @@ export async function GET(req: NextRequest) {
 
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
-        const userId = payload.userId;
+        const userId = new mongoose.Types.ObjectId(payload.userId as string);
 
         const profile = await TeacherProfile.findOne({ user: userId }).populate("user", "name email");
         return NextResponse.json(profile);
@@ -30,7 +31,7 @@ export async function PUT(req: NextRequest) {
 
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
-        const userId = payload.userId;
+        const userId = new mongoose.Types.ObjectId(payload.userId as string);
 
         const body = await req.json();
         const { department, subject, bio } = body;

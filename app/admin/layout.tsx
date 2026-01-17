@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 
 export default function AdminLayout({
     children,
@@ -11,6 +12,7 @@ export default function AdminLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const { logout } = useAuth();
 
     const navItems = [
         { name: "Dashboard", href: "/admin" },
@@ -18,11 +20,6 @@ export default function AdminLayout({
         { name: "Students", href: "/admin/students" },
         { name: "Appointments", href: "/admin/appointments" },
     ];
-
-    const handleLogout = () => {
-        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-        window.location.href = "/login";
-    };
 
     return (
         <div className="flex min-h-screen">
@@ -47,7 +44,7 @@ export default function AdminLayout({
                     <Button
                         variant="destructive"
                         className="w-full mt-8"
-                        onClick={handleLogout}
+                        onClick={logout}
                     >
                         Logout
                     </Button>

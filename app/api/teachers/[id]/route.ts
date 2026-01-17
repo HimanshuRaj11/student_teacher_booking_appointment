@@ -23,6 +23,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
             isBooked: false,
             date: { $gte: new Date() } // Future slots only
         }).sort({ date: 1 });
+        console.log(slots);
 
         return NextResponse.json({ teacher, slots });
     } catch (error) {

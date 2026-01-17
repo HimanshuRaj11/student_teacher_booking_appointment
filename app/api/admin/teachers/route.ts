@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
 import User from "@/lib/models/User";
 import TeacherProfile from "@/lib/models/TeacherProfile";
-import { hashPassword, verifyAccessToken } from "@/lib/auth";
+import { hashPassword } from "@/lib/auth";
 import { z } from "zod";
 
 // Ensure only admin calls this (can be done via middleware + double check here)
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "Teacher created successfully" }, { status: 201 });
     } catch (error: any) {
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: error.errors }, { status: 400 });
+            return NextResponse.json({ error: error.message }, { status: 400 });
         }
         return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
     }

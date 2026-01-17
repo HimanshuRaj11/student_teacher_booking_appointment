@@ -1,13 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verifyAccessToken } from "./lib/auth"; // We might need a purely edge-compatible verification if 'lib/auth' uses bcrypt (which is not edge-friendly). 
-// 'jsonwebtoken' and 'bcryptjs' might have issues in Edge Runtime.
-// For middleware, it's safer to use 'jose' or rely on cookie presence for basic check + server component/api check.
-// BUT, sticking to "verifyAccessToken" imports might break if it imports "bcryptjs".
-// Let's modify 'lib/auth.ts' to split edge-safe code or just use a simple cookie check here, 
-// and do full validation in layout/page/api.
-// OR, use 'jose' for JWT verification in middleware.
-// For this task, I will attempt to separate concerns or just use 'jose' here strictly.
+
+
 
 import { jwtVerify } from "jose";
 
@@ -22,10 +16,23 @@ export async function middleware(req: NextRequest) {
     // Paths that are public
     const publicPaths = ["/login", "/register", "/api/auth/login", "/api/auth/register", "/"];
     if (publicPaths.includes(pathname)) {
+        // If on login/register pages with a token, verify it first
         if (token && pathname !== "/") {
-            // If already logged in and trying to access auth pages, redirect to dashboard?
-            // Let's keep it simple: allow access but maybe redirect from login if already logged in.
-            // For now, do nothing.
+            try {
+                await jwtVerify(token, JWT_SECRET);
+                // Token is valid, redirect to home
+                return NextResponse.redirect(new URL("/", req.url));
+            } catch (error) {
+                // Token is invalid, clear it and allow access to auth pages
+                const response = NextResponse.next();
+                response.cookies.set("token", "", {
+                    httpOnly: true,
+                    path: "/",
+                    maxAge: 0,
+                    expires: new Date(0)
+                });
+                return response;
+            }
         }
         return NextResponse.next();
     }
@@ -56,8 +63,15 @@ export async function middleware(req: NextRequest) {
 
             return NextResponse.next();
         } catch (error) {
-            // Token invalid
-            return NextResponse.redirect(new URL("/login", req.url));
+            // Token invalid, clear it and redirect to login
+            const response = NextResponse.redirect(new URL("/login", req.url));
+            response.cookies.set("token", "", {
+                httpOnly: true,
+                path: "/",
+                maxAge: 0,
+                expires: new Date(0)
+            });
+            return response;
         }
     }
 
