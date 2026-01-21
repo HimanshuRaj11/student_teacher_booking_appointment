@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dbConnect from "@/lib/db";
 import TeacherProfile from "@/lib/models/TeacherProfile";
 
-import { jwtVerify } from "jose"; // Middleware used jose, let's consistency check.
+import { jwtVerify } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_change_me_in_prod");
 
